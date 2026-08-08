@@ -46,30 +46,30 @@ function Process-Folder {
         Success = $false
         Changed = $false
         FilesChanged = ""
-        Error = ""
+        ErrorMessage = ""
     }
 
     try {
         $ResolvedPath = Resolve-Path $Path -ErrorAction Stop
     } catch {
-        $Error = "Cannot resolve path"
-        Write-Log "$Error: $Path" 'ERROR'
-        $Result.Error = $Error
+        $ErrorMsgMsg = "Cannot resolve path"
+        Write-Log "$ErrorMsgMsg : $Path" 'ERROR'
+        $Result.ErrorMessage = $ErrorMsgMsg
         return $Result
     }
 
     if (-not (Test-Path -LiteralPath $ResolvedPath)) {
-        $Error = "Folder does not exist"
-        Write-Log "$Error, skipping" 'ERROR'
-        $Result.Error = $Error
+        $ErrorMsgMsg = "Folder does not exist"
+        Write-Log "$ErrorMsgMsg, skipping" 'ERROR'
+        $Result.ErrorMessage = $ErrorMsgMsg
         return $Result
     }
 
     $gitDir = Join-Path $ResolvedPath ".git"
     if (-not (Test-Path -LiteralPath $gitDir)) {
-        $Error = "Not a git repository (no .git folder)"
-        Write-Log "$Error, skipping" 'WARNING'
-        $Result.Error = $Error
+        $ErrorMsgMsg = "Not a git repository (no .git folder)"
+        Write-Log "$ErrorMsgMsg, skipping" 'WARNING'
+        $Result.ErrorMessage = $ErrorMsgMsg
         return $Result
     }
 
@@ -79,9 +79,9 @@ function Process-Folder {
         $status = git status --porcelain 2>&1
 
         if ($LASTEXITCODE -ne 0) {
-            $Error = "Git status failed: $status"
-            Write-Log $Error 'ERROR'
-            $Result.Error = $Error
+            $ErrorMsg = "Git status failed: $status"
+            Write-Log $ErrorMsg 'ERROR'
+            $Result.ErrorMessage = $ErrorMsg
             Pop-Location
             return $Result
         }
@@ -102,9 +102,9 @@ function Process-Folder {
 
         $addResult = git add . 2>&1
         if ($LASTEXITCODE -ne 0) {
-            $Error = "Git add failed: $addResult"
-            Write-Log $Error 'ERROR'
-            $Result.Error = $Error
+            $ErrorMsg = "Git add failed: $addResult"
+            Write-Log $ErrorMsg 'ERROR'
+            $Result.ErrorMessage = $ErrorMsg
             Pop-Location
             return $Result
         }
@@ -114,9 +114,9 @@ function Process-Folder {
         $commitResult = git commit -m $commitMessage 2>&1
 
         if ($LASTEXITCODE -ne 0) {
-            $Error = "Git commit failed: $commitResult"
-            Write-Log $Error 'ERROR'
-            $Result.Error = $Error
+            $ErrorMsg = "Git commit failed: $commitResult"
+            Write-Log $ErrorMsg 'ERROR'
+            $Result.ErrorMessage = $ErrorMsg
             Pop-Location
             return $Result
         }
@@ -127,9 +127,9 @@ function Process-Folder {
         $pushResult = git push 2>&1
 
         if ($LASTEXITCODE -ne 0) {
-            $Error = "Git push failed: $pushResult"
-            Write-Log $Error 'ERROR'
-            $Result.Error = $Error
+            $ErrorMsg = "Git push failed: $pushResult"
+            Write-Log $ErrorMsg 'ERROR'
+            $Result.ErrorMessage = $ErrorMsg
             Pop-Location
             return $Result
         }
@@ -140,9 +140,9 @@ function Process-Folder {
         return $Result
 
     } catch {
-        $Error = "Exception occurred: $_"
-        Write-Log $Error 'ERROR'
-        $Result.Error = $Error
+        $ErrorMsg = "Exception occurred: $_"
+        Write-Log $ErrorMsg 'ERROR'
+        $Result.ErrorMessage = $ErrorMsg
         Pop-Location
         return $Result
     }
@@ -202,7 +202,7 @@ if (Test-Path $feishuModule) {
             Folders = $FolderResults
         }
 
-        $Sent = Send-FeishuNotification -Result $NotificationResult -ConfigPath (Join-Path $ScriptDir "feishu.config")
+        $Sent = Send-FeishuNotification $NotificationResult
 
         if ($Sent) {
             Write-Log "Feishu notification sent successfully" 'SUCCESS'
