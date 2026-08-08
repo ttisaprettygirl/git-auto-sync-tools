@@ -1,0 +1,13 @@
+{
+  "_comment": "Copy this file to sync-folders.json and modify the paths below",
+  "folders": [
+    {
+      "path": "C:\\Users\\YOUR_USERNAME\\Desktop\\02_工作",
+      "name": "工作"
+    },
+    {
+      "path": "C:\\Users\\YOUR_USERNAME\\Desktop\\1991",
+      "name": "创业项目"
+    }
+  ]
+}

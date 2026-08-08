@@ -1,0 +1,8 @@
+# Feishu Configuration
+# Copy this file to feishu.config and modify the values below
+
+# Feishu Webhook URL
+FEISHU_WEBHOOK_URL=https://open.feishu.cn/open-apis/bot/v2/hook/YOUR_WEBHOOK_URL
+
+# Feishu Sign Key (optional, if you enabled signature verification)
+FEISHU_SIGN_KEY=YOUR_SIGN_KEY

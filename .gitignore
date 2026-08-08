@@ -1,0 +1,19 @@
+# Local configuration files (contains sensitive data)
+sync-folders.json
+feishu.config
+
+# Log files
+logs/
+*.log
+
+# PowerShell specific
+*.ps1xml
+
+# OS specific
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temp files
+*.tmp
+*~
