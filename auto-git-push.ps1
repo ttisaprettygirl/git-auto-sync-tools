@@ -49,31 +49,29 @@ function Process-Folder {
         ErrorMessage = ""
     }
 
-    try {
-        $ResolvedPath = Resolve-Path $Path -ErrorAction Stop
-    } catch {
-        $ErrorMsgMsg = "Cannot resolve path"
-        Write-Log "$ErrorMsgMsg : $Path" 'ERROR'
-        $Result.ErrorMessage = $ErrorMsgMsg
-        return $Result
-    }
+    # For Chinese paths, use the path directly without Resolve-Path
+    # Resolve-Path can fail with non-ASCII characters
+    $TargetPath = $Path
 
-    if (-not (Test-Path -LiteralPath $ResolvedPath)) {
+    # Check if path exists using LiteralPath (handles special characters)
+    if (-not (Test-Path -LiteralPath $TargetPath)) {
         $ErrorMsgMsg = "Folder does not exist"
-        Write-Log "$ErrorMsgMsg, skipping" 'ERROR'
+        Write-Log "${ErrorMsgMsg}: ${TargetPath}" 'ERROR'
         $Result.ErrorMessage = $ErrorMsgMsg
         return $Result
     }
 
-    $gitDir = Join-Path $ResolvedPath ".git"
+    # Check if it's a git repository
+    $gitDir = Join-Path $TargetPath ".git"
     if (-not (Test-Path -LiteralPath $gitDir)) {
         $ErrorMsgMsg = "Not a git repository (no .git folder)"
-        Write-Log "$ErrorMsgMsg, skipping" 'WARNING'
+        Write-Log "${ErrorMsgMsg}: ${TargetPath}" 'WARNING'
         $Result.ErrorMessage = $ErrorMsgMsg
         return $Result
     }
 
-    Push-Location -LiteralPath $ResolvedPath
+    # Change to the target directory
+    Push-Location -LiteralPath $TargetPath
 
     try {
         $status = git status --porcelain 2>&1
