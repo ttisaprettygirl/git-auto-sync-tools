@@ -1,0 +1,24 @@
+{
+    "folders":  [
+                    {
+                        "name":  "工作",
+                        "path":  "C:\\Users\\jerez\\Desktop\\02_工作"
+                    },
+                    {
+                        "name":  "创业项目",
+                        "path":  "C:\\Users\\jerez\\Desktop\\1991"
+                    },
+                    {
+                        "name":  "学习",
+                        "path":  "C:\\Users\\jerez\\Desktop\\01_学习"
+                    },
+                    {
+                        "name":  "个人成长",
+                        "path":  "C:\\Users\\jerez\\Desktop\\03_KnowMyself"
+                    },
+                    {
+                        "name":  "工具集合",
+                        "path":  "C:\\Users\\jerez\\Desktop\\00_工具"
+                    }
+                ]
+}
